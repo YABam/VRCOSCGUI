@@ -16,3 +16,5 @@ This is a OSCSender for VRChat based on Plugins. By using interface can add more
         event PluginConsoleRequest ConsolePrint;
         //request osc sender
         event OSCSendRequest SendOSCRequest;
+# MSI Afterburner shared memory reader
+Contains a lib used to read MSI Afterburner shared memory and get system information from it.

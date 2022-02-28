@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Reflection;        
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -48,7 +48,7 @@ namespace VRCOSCGUI
             DirectoryInfo dir = new DirectoryInfo(path);
             //if not exist, create
             if (dir.Exists == false)
-            { 
+            {
                 Directory.CreateDirectory(path);
             }
             FileInfo[] fInfo = dir.GetFiles();
@@ -91,7 +91,7 @@ namespace VRCOSCGUI
                                 //Chreate Thread for this Plugin
                                 Thread _thread = new Thread(new ThreadStart(tempPlugin.Action));
                                 _thread.IsBackground = true;
-                                _pluginThreads.Add(_thread);        
+                                _pluginThreads.Add(_thread);
                             }
                         }
                     }
@@ -125,7 +125,7 @@ namespace VRCOSCGUI
                     _pluginThreads[i].Abort();
                     _pluginThreads.RemoveAt(i);
                     _loadedPlugins.RemoveAt(i);
-                    tcConsole.WriteLine("Some Plugin Start error, they will be aborted");       
+                    tcConsole.WriteLine("Some Plugin Start error, they will be aborted");
                 }
             }
         }
@@ -183,7 +183,7 @@ namespace VRCOSCGUI
                 remoteIPSet = true;
             }
             else
-            { 
+            {
                 remoteIPSet = false;
             }
             RefreshStatus();
@@ -197,11 +197,15 @@ namespace VRCOSCGUI
             {
                 connection = true;
             }
-            OnHolderStatusChange(new HolderStatus(
-                OSCLocalIP.EndPoint,
-                OSCRemoteIP.EndPoint,
-                connection
-                ));
+
+            if (OnHolderStatusChange != null)
+            {
+                OnHolderStatusChange(new HolderStatus(
+                    OSCLocalIP.EndPoint,
+                    OSCRemoteIP.EndPoint,
+                    connection
+                    ));
+            }
         }
-    }   
+    }
 }

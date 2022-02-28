@@ -125,7 +125,9 @@
             this.Controls.Add(this.OSCLocalIP);
             this.Controls.Add(this.OSCRemoteIP);
             this.Controls.Add(this.mainMenuStrip);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MainMenuStrip = this.mainMenuStrip;
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.MainForm_Load);

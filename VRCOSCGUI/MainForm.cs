@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Reflection;        
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,10 +25,16 @@ namespace VRCOSCGUI
         int _countPluginsFailed = 0;
         bool remoteIPSet = false;
 
+        int _portListen = 9001;
+
         event HolderStatusChange OnHolderStatusChange;
+        event HolderOSCReceived OnHolderOSCReceived;
 
         //UDP client
         private UdpClient udpSend = null;
+        private UdpClient udpReceive = null;
+        Thread thrUDPReceive;
+        bool isUDPListening = false;
 
         //Thread List
         List<Thread> _pluginThreads = new List<Thread>();
@@ -48,7 +54,7 @@ namespace VRCOSCGUI
             DirectoryInfo dir = new DirectoryInfo(path);
             //if not exist, create
             if (dir.Exists == false)
-            { 
+            {
                 Directory.CreateDirectory(path);
             }
             FileInfo[] fInfo = dir.GetFiles();
@@ -80,6 +86,7 @@ namespace VRCOSCGUI
                                 tempPlugin.SendOSCRequest += new OSCSendRequest(HolderOSCSend);
                                 tempPlugin.ConsolePrint += new PluginConsoleRequest(HolderConsolePrint);
                                 OnHolderStatusChange += new HolderStatusChange(tempPlugin.OnHolderStatusChange);
+                                OnHolderOSCReceived += new HolderOSCReceived(tempPlugin.OnHolderOSCReceived);
                                 //Add Menu
                                 ToolStripMenuItem newItem = new ToolStripMenuItem();
                                 newItem.Text = tempPlugin.WhoAmI().Name;
@@ -91,7 +98,7 @@ namespace VRCOSCGUI
                                 //Chreate Thread for this Plugin
                                 Thread _thread = new Thread(new ThreadStart(tempPlugin.Action));
                                 _thread.IsBackground = true;
-                                _pluginThreads.Add(_thread);        
+                                _pluginThreads.Add(_thread);
                             }
                         }
                     }
@@ -125,8 +132,18 @@ namespace VRCOSCGUI
                     _pluginThreads[i].Abort();
                     _pluginThreads.RemoveAt(i);
                     _loadedPlugins.RemoveAt(i);
-                    tcConsole.WriteLine("Some Plugin Start error, they will be aborted");       
+                    tcConsole.WriteLine("Some Plugin Start error, they will be aborted");
                 }
+            }
+        }
+
+        private void tbPortListen_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+
+            if ((e.KeyChar >= '0' && e.KeyChar <= '9') || e.KeyChar == (char)8)
+            {
+                e.Handled = false; return;
             }
         }
 
@@ -181,12 +198,56 @@ namespace VRCOSCGUI
             if (e == true)
             {
                 remoteIPSet = true;
+                tbPortListen.Enabled = false;
+                if (!int.TryParse(tbPortListen.Text, out _portListen))
+                {
+                    //default
+                    _portListen = 9001;
+                }
+                udpReceive = new UdpClient(new IPEndPoint(OSCRemoteIP.EndPoint.Address, _portListen));
+                //Start listen thread
+                if (thrUDPReceive != null)
+                {
+                    thrUDPReceive.Abort();
+                }
+                thrUDPReceive = new Thread(ReceiveOSCMessage);
+                thrUDPReceive.Start();
+                isUDPListening = true;
+                tcConsole.WriteLine("UDP Listen started successfully on " + OSCRemoteIP.EndPoint.Address.ToString() + ":" + _portListen.ToString());
             }
             else
-            { 
+            {
                 remoteIPSet = false;
+                tbPortListen.Enabled=true;
+                if(isUDPListening == true)
+                {
+                    thrUDPReceive.Abort();
+                    udpReceive.Close();
+                    udpReceive.Dispose();
+                    isUDPListening=false;
+                    thrUDPReceive = null;
+                    tcConsole.WriteLine("UDP Listen stopped!");
+                }
             }
             RefreshStatus();
+        }
+
+        private void ReceiveOSCMessage()
+        {
+            while (isUDPListening)
+            {
+                IPEndPoint remoteIP = null;
+                try
+                {
+                    byte[] bytRecv = udpReceive.Receive(ref remoteIP);
+                    SendReceivedOSCToPlugins(bytRecv);
+                }
+                catch (Exception ex)
+                {
+                    tcConsole.WriteLine(ex.Message);
+                    break;
+                }
+            }
         }
 
         private void RefreshStatus()
@@ -197,11 +258,26 @@ namespace VRCOSCGUI
             {
                 connection = true;
             }
-            OnHolderStatusChange(new HolderStatus(
-                OSCLocalIP.EndPoint,
-                OSCRemoteIP.EndPoint,
-                connection
-                ));
+            if (OnHolderStatusChange != null && _countPluginsLoaded > 0)
+            {
+                OnHolderStatusChange(new HolderStatus(
+                    OSCLocalIP.EndPoint,
+                    OSCRemoteIP.EndPoint,
+                    connection
+                    ));
+            }
         }
-    }   
+
+        private void SendReceivedOSCToPlugins(byte[] OSCMsg)
+        {
+            if (OSCProtocols.OSCConvertToString(OSCMsg, out string addr, out string data, out Type t))
+            {
+                if (OnHolderOSCReceived != null && _countPluginsLoaded > 0)
+                {
+                    //Send OSC data to each plugin
+                    OnHolderOSCReceived(addr, data, t);
+                }
+            }
+        }
+    }
 }

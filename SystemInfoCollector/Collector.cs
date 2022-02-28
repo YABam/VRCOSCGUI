@@ -75,5 +75,11 @@ namespace SystemInfoCollector
                 "1.0.0",
                 "This is used to collect system info from MSI Afterburner");
         }
+
+        public void OnHolderOSCReceived(string addr, string data, Type t)
+        {
+            //Do Nothing
+            //ConsolePrint?.Invoke(t.ToString() + " OSC Received by Collector at " + addr + ", " + data);
+        }
     }
 }

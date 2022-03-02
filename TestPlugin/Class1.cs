@@ -70,7 +70,7 @@ namespace TestPlugin
 
         public void OnHolderOSCReceived(string addr, string data, Type t)
         {
-			ConsolePrint?.Invoke(t.ToString() + " OSC Received by testPlugin at " + addr + ", " + data);
+			ConsolePrint(t.ToString() + " OSC Received by testPlugin at " + addr + ", " + data);
         }
     }
 }

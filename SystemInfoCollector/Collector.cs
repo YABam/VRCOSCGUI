@@ -17,36 +17,48 @@ namespace SystemInfoCollector
         Form1 settings;
 
         int time = 2;
-        string addresss = "/avatar/parameters/CPULoad";
 
         bool connection = false;
 
-        float data;
+        List<MSIData> OSCData;
 
         public void Action()
         {
-            //[DllImport(@("DownloadPlaintext.dll", EntryPoint = "DownloadPlaintext"))]
             MSIABVisitor afterburner = new MSIABVisitor();
-            
+            OSCData = new List<MSIData>();
             while (true)
-            {       
-                if (connection)
+            {
+                if (connection && OSCData != null && OSCData.Count > 0)
                 {
                     List<ABReportDataGroup> abReport = new List<ABReportDataGroup>(afterburner.GetReportArray());
                     foreach (ABReportDataGroup abReportDataGroup in abReport)
                     {
-                        if (abReportDataGroup.dataName == "CPU usage")
+                        foreach (MSIData msid in OSCData)
                         {
-                            if (float.TryParse(abReportDataGroup.dataValue, out data))
+                            if (abReportDataGroup.dataName == msid.name)
                             {
-                                if (data <= 10) data = 10;
-                                if (data >= 25) data = 25;
-                                data = (data - 10) / 15; // 0~1
-                                SendOSCRequest(addresss, data.ToString("0.0"), typeof(float));
-                                ConsolePrint("CPU usage OSC sent!");        
+                                float data;
+                                if (float.TryParse(abReportDataGroup.dataValue, out data))
+                                {
+                                    float dmin;
+                                    float dmax;
+                                    if (float.TryParse(msid.min, out dmin) && float.TryParse(msid.max, out dmax))
+                                    {
+                                        if (data <= dmin) data = dmin;
+                                        if (data >= dmax) data = dmax;
+                                        data = (data - dmin) / (dmax - dmin); // 0~1 
+                                        msid.data = data.ToString();
+                                    }
+                                }
                                 break;
                             }
                         }
+                    }
+
+                    foreach (MSIData msid in OSCData)
+                    {
+                        SendOSCRequest(msid.address, msid.data, typeof(float));
+                        ConsolePrint(msid.name + " OSC sent to " + msid.address);
                     }
                 }
                 Thread.Sleep(time * 1000);
@@ -60,15 +72,15 @@ namespace SystemInfoCollector
 
         public void Settings(object sender, EventArgs e)
         {
-            settings = new Form1(time,addresss);
-            settings.Show();                        
+            settings = new Form1(time, OSCData);
+            settings.Show();
             settings.FormClosing += FinishSetting;
         }
 
         private void FinishSetting(object sender, FormClosingEventArgs e)
         {
             time = settings.time;
-            addresss = settings.address;
+            OSCData = settings.data;
         }
 
         public PluginInfo WhoAmI()
@@ -83,6 +95,24 @@ namespace SystemInfoCollector
         {
             //Do Nothing
             //ConsolePrint?.Invoke(t.ToString() + " OSC Received by Collector at " + addr + ", " + data);
+        }
+    }
+
+    public class MSIData
+    {
+        public string name;
+        public string address;
+        public string data;
+        public string min;
+        public string max;
+
+        public MSIData(string iname, string iaddr, string idata, string imin, string imax)
+        {
+            name = iname;
+            address = iaddr;
+            data = idata;
+            min = imin;
+            max = imax;
         }
     }
 }

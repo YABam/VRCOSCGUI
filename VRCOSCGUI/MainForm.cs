@@ -98,6 +98,7 @@ namespace VRCOSCGUI
                                 //Chreate Thread for this Plugin
                                 Thread _thread = new Thread(new ThreadStart(tempPlugin.Action));
                                 _thread.IsBackground = true;
+                                _thread.Name = tempPlugin.WhoAmI().Name;
                                 _pluginThreads.Add(_thread);
                             }
                         }
@@ -211,6 +212,8 @@ namespace VRCOSCGUI
                     thrUDPReceive.Abort();
                 }
                 thrUDPReceive = new Thread(ReceiveOSCMessage);
+                thrUDPReceive.Name = "OSCListener";
+                thrUDPReceive.IsBackground = true;
                 thrUDPReceive.Start();
                 isUDPListening = true;
                 tcConsole.WriteLine("UDP Listen started successfully on " + OSCRemoteIP.EndPoint.Address.ToString() + ":" + _portListen.ToString());
@@ -244,7 +247,7 @@ namespace VRCOSCGUI
                 }
                 catch (Exception ex)
                 {
-                    tcConsole.WriteLine(ex.Message);
+                    HolderConsolePrint(ex.Message);
                     break;
                 }
             }

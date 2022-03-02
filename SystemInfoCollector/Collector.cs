@@ -16,7 +16,7 @@ namespace SystemInfoCollector
 
         Form1 settings;
 
-        int time = 2;
+        int time = 1;
         string addresss = "/avatar/parameters/CPULoad";
 
         bool connection = false;
@@ -39,10 +39,7 @@ namespace SystemInfoCollector
                         {
                             if (float.TryParse(abReportDataGroup.dataValue, out data))
                             {
-                                if (data <= 10) data = 10;
-                                if (data >= 25) data = 25;
-                                data = (data - 10) / 15; // 0~1
-                                SendOSCRequest(addresss, data.ToString("0.0"), typeof(float));
+                                SendOSCRequest(addresss, (data + 0.1f).ToString("0.0"), typeof(float));
                                 ConsolePrint("CPU usage OSC sent!");        
                                 break;
                             }
@@ -77,12 +74,6 @@ namespace SystemInfoCollector
                 "SystemInfoCollector",
                 "1.0.0",
                 "This is used to collect system info from MSI Afterburner");
-        }
-
-        public void OnHolderOSCReceived(string addr, string data, Type t)
-        {
-            //Do Nothing
-            //ConsolePrint?.Invoke(t.ToString() + " OSC Received by Collector at " + addr + ", " + data);
         }
     }
 }

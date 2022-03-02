@@ -10,6 +10,7 @@ namespace VRCOSCGUI.Interface
     public delegate void OSCSendRequest(string addr, string data, Type t);
     public delegate void PluginConsoleRequest(string msg);
     public delegate void HolderStatusChange(HolderStatus hs);
+    public delegate void HolderOSCReceived(string addr, string data, Type t);
     public interface IOSCPlugin
     {
         //插件自述      
@@ -20,6 +21,8 @@ namespace VRCOSCGUI.Interface
         void Settings(object sender, EventArgs e);
         //宿主状态改变事件
         void OnHolderStatusChange(HolderStatus hs);
+        //收OSC信息
+        void OnHolderOSCReceived(string addr, string data, Type t);
 
         //定义事件
         //写日志

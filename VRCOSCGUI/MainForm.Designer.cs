@@ -35,7 +35,9 @@
             this.btnClearConsole = new System.Windows.Forms.Button();
             this.OSCLocalIP = new OSCOperatorSpace.OSCOperator();
             this.OSCRemoteIP = new OSCOperatorSpace.OSCOperator();
+            this.tbPortListen = new System.Windows.Forms.TextBox();
             this.tcConsole = new VRCOSCGUI.TextConsole();
+            this.label3 = new System.Windows.Forms.Label();
             this.mainMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -103,6 +105,15 @@
             this.OSCRemoteIP.TabIndex = 1;
             this.OSCRemoteIP.OnIpSet += new OSCOperatorSpace.IpSet(this.OSCRemoteIP_OnIpSet);
             // 
+            // tbPortListen
+            // 
+            this.tbPortListen.Location = new System.Drawing.Point(65, 154);
+            this.tbPortListen.Name = "tbPortListen";
+            this.tbPortListen.Size = new System.Drawing.Size(100, 21);
+            this.tbPortListen.TabIndex = 7;
+            this.tbPortListen.Text = "9001";
+            this.tbPortListen.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbPortListen_KeyPress);
+            // 
             // tcConsole
             // 
             this.tcConsole.Location = new System.Drawing.Point(12, 213);
@@ -113,11 +124,22 @@
             this.tcConsole.Size = new System.Drawing.Size(648, 178);
             this.tcConsole.TabIndex = 5;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 157);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(47, 12);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Listen:";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(672, 403);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.tbPortListen);
             this.Controls.Add(this.btnClearConsole);
             this.Controls.Add(this.tcConsole);
             this.Controls.Add(this.label2);
@@ -148,6 +170,8 @@
         private System.Windows.Forms.Label label2;
         private TextConsole tcConsole;
         private System.Windows.Forms.Button btnClearConsole;
+        private System.Windows.Forms.TextBox tbPortListen;
+        private System.Windows.Forms.Label label3;
     }
 }
 

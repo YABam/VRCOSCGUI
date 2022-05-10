@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
+# Blend for Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MSIABSharedMEMTest", "MSIABSharedMEM2OSC\MSIABSharedMEM2OSC.vcxproj", "{607F2B2E-BF59-44B6-902A-5FF0002BBB86}"
@@ -18,6 +18,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IOSCPlugin", "IOSCPlugin\IOSCPlugin.csproj", "{FAF85800-7E62-4A19-B9CB-530068B79967}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemInfoCollector", "SystemInfoCollector\SystemInfoCollector.csproj", "{25C1411C-BC96-42AC-8ACA-8C73604DDA98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPF_VRCOSCGUI", "WPF_VRCOSCGUI\WPF_VRCOSCGUI.csproj", "{5BC4E2E5-E472-4E81-8050-2A505FFC4492}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPF_OSCOperator", "WPF_OSCOperator\WPF_OSCOperator.csproj", "{02D9237C-1EEC-4A01-90A6-191F7F7A97B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,6 +129,30 @@ Global
 		{25C1411C-BC96-42AC-8ACA-8C73604DDA98}.Release|x64.Build.0 = Release|Any CPU
 		{25C1411C-BC96-42AC-8ACA-8C73604DDA98}.Release|x86.ActiveCfg = Release|Any CPU
 		{25C1411C-BC96-42AC-8ACA-8C73604DDA98}.Release|x86.Build.0 = Release|Any CPU
+		{5BC4E2E5-E472-4E81-8050-2A505FFC4492}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BC4E2E5-E472-4E81-8050-2A505FFC4492}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BC4E2E5-E472-4E81-8050-2A505FFC4492}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5BC4E2E5-E472-4E81-8050-2A505FFC4492}.Debug|x64.Build.0 = Debug|Any CPU
+		{5BC4E2E5-E472-4E81-8050-2A505FFC4492}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5BC4E2E5-E472-4E81-8050-2A505FFC4492}.Debug|x86.Build.0 = Debug|Any CPU
+		{5BC4E2E5-E472-4E81-8050-2A505FFC4492}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BC4E2E5-E472-4E81-8050-2A505FFC4492}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BC4E2E5-E472-4E81-8050-2A505FFC4492}.Release|x64.ActiveCfg = Release|Any CPU
+		{5BC4E2E5-E472-4E81-8050-2A505FFC4492}.Release|x64.Build.0 = Release|Any CPU
+		{5BC4E2E5-E472-4E81-8050-2A505FFC4492}.Release|x86.ActiveCfg = Release|Any CPU
+		{5BC4E2E5-E472-4E81-8050-2A505FFC4492}.Release|x86.Build.0 = Release|Any CPU
+		{02D9237C-1EEC-4A01-90A6-191F7F7A97B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02D9237C-1EEC-4A01-90A6-191F7F7A97B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02D9237C-1EEC-4A01-90A6-191F7F7A97B4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{02D9237C-1EEC-4A01-90A6-191F7F7A97B4}.Debug|x64.Build.0 = Debug|Any CPU
+		{02D9237C-1EEC-4A01-90A6-191F7F7A97B4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{02D9237C-1EEC-4A01-90A6-191F7F7A97B4}.Debug|x86.Build.0 = Debug|Any CPU
+		{02D9237C-1EEC-4A01-90A6-191F7F7A97B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02D9237C-1EEC-4A01-90A6-191F7F7A97B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02D9237C-1EEC-4A01-90A6-191F7F7A97B4}.Release|x64.ActiveCfg = Release|Any CPU
+		{02D9237C-1EEC-4A01-90A6-191F7F7A97B4}.Release|x64.Build.0 = Release|Any CPU
+		{02D9237C-1EEC-4A01-90A6-191F7F7A97B4}.Release|x86.ActiveCfg = Release|Any CPU
+		{02D9237C-1EEC-4A01-90A6-191F7F7A97B4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

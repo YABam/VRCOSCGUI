@@ -205,18 +205,39 @@ namespace VRCOSCGUI
                     //default
                     _portListen = 9001;
                 }
-                udpReceive = new UdpClient(new IPEndPoint(OSCRemoteIP.EndPoint.Address, _portListen));
-                //Start listen thread
-                if (thrUDPReceive != null)
+
+                string sHostName = Dns.GetHostName();
+                IPHostEntry ipE = Dns.GetHostEntry(sHostName);
+                IPAddress[] IpA = ipE.AddressList;
+
+                bool isListenLocal = false;
+                foreach (IPAddress ip in IpA)
                 {
-                    thrUDPReceive.Abort();
+                    if (ip == OSCRemoteIP.EndPoint.Address)
+                    {
+                        isListenLocal = true;
+                        break;
+                    }
                 }
-                thrUDPReceive = new Thread(ReceiveOSCMessage);
-                thrUDPReceive.Name = "OSCListener";
-                thrUDPReceive.IsBackground = true;
-                thrUDPReceive.Start();
-                isUDPListening = true;
-                tcConsole.WriteLine("UDP Listen started successfully on " + OSCRemoteIP.EndPoint.Address.ToString() + ":" + _portListen.ToString());
+                if (isListenLocal)
+                {
+                    udpReceive = new UdpClient(new IPEndPoint(OSCRemoteIP.EndPoint.Address, _portListen));
+                    //Start listen thread
+                    if (thrUDPReceive != null)
+                    {
+                        thrUDPReceive.Abort();
+                    }
+                    thrUDPReceive = new Thread(ReceiveOSCMessage);
+                    thrUDPReceive.Name = "OSCListener";
+                    thrUDPReceive.IsBackground = true;
+                    thrUDPReceive.Start();
+                    isUDPListening = true;
+                    tcConsole.WriteLine("UDP Listen started successfully on " + OSCRemoteIP.EndPoint.Address.ToString() + ":" + _portListen.ToString());
+                }
+                else
+                {
+                    tcConsole.WriteLine("UDP Listen will not open when listen to remote.");
+                }
             }
             else
             {
